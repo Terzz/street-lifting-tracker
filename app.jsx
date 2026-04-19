@@ -144,7 +144,7 @@ function App() {
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 pb-24">
       <div className="max-w-2xl mx-auto">
-        <header className="sticky top-0 z-20 bg-zinc-950/90 backdrop-blur border-b border-zinc-800 px-4 py-3 flex items-center justify-between">
+        <header className="sticky top-0 z-20 bg-zinc-950/90 backdrop-blur border-b border-zinc-800 px-4 pb-3 flex items-center justify-between" style={{paddingTop:'calc(env(safe-area-inset-top) + 0.75rem)'}}>
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg flex items-center justify-center">
               <Dumbbell size={18} className="text-zinc-950" strokeWidth={2.5} />
@@ -220,7 +220,7 @@ function HomeView({ sessions, body, gtg, saveGtg, setTab, setActiveSession }) {
           <>
             <div className="text-xs text-zinc-500 mb-3">{prog.exercises.length} exercices</div>
             <button onClick={() => { setActiveSession({ programId: dow, date: todayStr }); setTab('session'); }}
-              className="w-full bg-orange-500 active:bg-orange-600 active:scale-[0.98] text-zinc-950 font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
+              className="w-full bg-orange-500 active:bg-orange-600 active:scale-[0.98] text-zinc-950 font-bold py-3 rounded-xl transition-transform duration-150 flex items-center justify-center gap-2">
               Démarrer la séance <ChevronRight size={18} strokeWidth={3} />
             </button>
           </>
@@ -275,7 +275,7 @@ function HomeView({ sessions, body, gtg, saveGtg, setTab, setActiveSession }) {
             return (
               <div key={ds} className="flex flex-col items-center gap-1">
                 <div className="w-full h-12 bg-zinc-800 rounded-md relative overflow-hidden">
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-600 to-amber-400 transition-all" style={{ height: `${bar * 100}%` }} />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-600 to-amber-400 transition-[height] duration-300" style={{ height: `${bar * 100}%` }} />
                 </div>
                 <div className="text-xs text-zinc-600">{['D', 'L', 'M', 'M', 'J', 'V', 'S'][d.getDay()]}</div>
               </div>
@@ -290,7 +290,7 @@ function HomeView({ sessions, body, gtg, saveGtg, setTab, setActiveSession }) {
           <div className="text-sm text-zinc-400">{sessionsThisWeek}/5 séances</div>
         </div>
         <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-orange-500 to-amber-500 transition-all" style={{ width: `${Math.min(sessionsThisWeek / 5, 1) * 100}%` }} />
+          <div className="h-full bg-gradient-to-r from-orange-500 to-amber-500 transition-[width] duration-300" style={{ width: `${Math.min(sessionsThisWeek / 5, 1) * 100}%` }} />
         </div>
       </div>
 
@@ -455,12 +455,14 @@ function SetRow({ idx, log, last, weighted, onUpdate }) {
       {weighted && (
         <div className="col-span-4">
           <input type="number" inputMode="decimal" step="0.5" value={w} onChange={e => setW(e.target.value)} onBlur={commitW}
+            enterKeyHint="done" onKeyDown={e => { if (e.key === 'Enter') e.target.blur(); }}
             aria-label={`Charge set ${idx + 1}`}
             placeholder="kg" className="w-full bg-zinc-800 border border-zinc-700 rounded-md px-2 py-2 text-base focus:outline-none focus:border-orange-500 tabular-nums" />
         </div>
       )}
       <div className={weighted ? 'col-span-3' : 'col-span-5'}>
         <input type="number" inputMode="numeric" value={r} onChange={e => setR(e.target.value)} onBlur={commitR}
+          enterKeyHint="done" onKeyDown={e => { if (e.key === 'Enter') e.target.blur(); }}
           aria-label={`Reps set ${idx + 1}`}
           placeholder="reps" className="w-full bg-zinc-800 border border-zinc-700 rounded-md px-2 py-2 text-base focus:outline-none focus:border-orange-500 tabular-nums" />
       </div>
@@ -572,11 +574,11 @@ function BodyView({ body, saveBody, deleteBody }) {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-xs uppercase tracking-wider text-zinc-500 font-semibold block mb-2">Poids (kg)</label>
-              <input type="number" inputMode="decimal" step="0.1" value={weight} onChange={e => setWeight(e.target.value)} placeholder="80.7" className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-base focus:outline-none focus:border-orange-500" />
+              <input type="number" inputMode="decimal" step="0.1" value={weight} onChange={e => setWeight(e.target.value)} enterKeyHint="done" onKeyDown={e => { if (e.key === 'Enter') e.target.blur(); }} placeholder="80.7" className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-base focus:outline-none focus:border-orange-500" />
             </div>
             <div>
               <label className="text-xs uppercase tracking-wider text-zinc-500 font-semibold block mb-2">BF (%)</label>
-              <input type="number" inputMode="decimal" step="0.1" value={bf} onChange={e => setBf(e.target.value)} placeholder="16.6" className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-base focus:outline-none focus:border-orange-500" />
+              <input type="number" inputMode="decimal" step="0.1" value={bf} onChange={e => setBf(e.target.value)} enterKeyHint="done" onKeyDown={e => { if (e.key === 'Enter') e.target.blur(); }} placeholder="16.6" className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-base focus:outline-none focus:border-orange-500" />
             </div>
           </div>
           <button onClick={handleSave} disabled={!weight} className="w-full bg-orange-500 disabled:opacity-40 text-zinc-950 font-bold py-2.5 rounded-lg">Enregistrer</button>
@@ -602,7 +604,7 @@ function BodyView({ body, saveBody, deleteBody }) {
           <div className="text-2xl font-bold text-orange-500">{Math.max(0, Math.min(100, progress)).toFixed(0)}%</div>
         </div>
         <div className="h-3 bg-zinc-800 rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-orange-500 to-amber-500 transition-all" style={{ width: `${Math.max(0, Math.min(100, progress))}%` }} />
+          <div className="h-full bg-gradient-to-r from-orange-500 to-amber-500 transition-[width] duration-300" style={{ width: `${Math.max(0, Math.min(100, progress))}%` }} />
         </div>
       </div>
       {body.length > 1 && (
